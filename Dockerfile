@@ -19,6 +19,7 @@ WORKDIR /app
 RUN apk add --no-cache ca-certificates
 
 COPY --from=builder /app/server .
+COPY --from=builder /app/frontend ./frontend
 
 EXPOSE 8080
 
