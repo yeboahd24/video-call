@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GoVideo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <!-- Lobby -->
+  <div id="lobby">
+    <div class="card">
+      <h1>🎥 GoVideo</h1>
+      <input id="username" type="text" placeholder="Your name" maxlength="32" />
+      <button id="btn-create">Create Room</button>
+      <div class="divider">or join existing</div>
+      <input id="room-input" type="text" placeholder="Paste room ID" />
+      <button id="btn-join">Join Room</button>
+      <p id="lobby-error" class="error"></p>
+    </div>
+  </div>
+
+  <!-- Call -->
+  <div id="call" class="hidden">
+    <header>
+      <span id="room-label"></span>
+      <div class="header-actions">
+        <button id="btn-copy" title="Copy room ID">📋 Copy ID</button>
+        <button id="btn-screen" title="Share screen">🖥 Share Screen</button>
+        <button id="btn-mute" title="Mute mic">🎤 Mute</button>
+        <button id="btn-cam" title="Toggle camera">📷 Stop Cam</button>
+        <button id="btn-leave" class="danger">Leave</button>
+      </div>
+    </header>
+    <div id="videos"></div>
+    <div id="status"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+
+</html>
