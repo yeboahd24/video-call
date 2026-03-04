@@ -1,4 +1,21 @@
+-- App flow
+-- - User A joins a room
+-- - User B joins a room
+-- - User A sends an offer to User B
+-- - User B sends an answer to User A
+-- - User A sends an ICE candidate to User B
+
+-- Logical flow
+-- User A sends an offer(SDP) -> stored in signaling table
+-- User B receives an offer(SDP) via WAL subscription
+-- Both users exchange ICE candidates -> stored in ice_candidates table
+-- WebRTC establishes a connection -> stored in participants table
+-- WebRTC uses this information to establish a direct peer to peer connection
+
+
+
 -- Rooms
+-- Rooms are the logical groupings of participants
 CREATE TABLE IF NOT EXISTS rooms (
     id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name       TEXT,
@@ -7,6 +24,7 @@ CREATE TABLE IF NOT EXISTS rooms (
 );
 
 -- Participants
+-- Participants are the users in a room
 CREATE TABLE IF NOT EXISTS participants (
     id        UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     room_id   UUID REFERENCES rooms(id),
@@ -17,6 +35,10 @@ CREATE TABLE IF NOT EXISTS participants (
 );
 
 -- SDP signaling
+-- SDP offer/answer
+-- SDP means Session Description Protocol
+-- https://en.wikipedia.org/wiki/Session_Description_Protocol
+-- It describes the media capabilities of your browser(video/audio, resolution, codecs, etc)
 CREATE TABLE IF NOT EXISTS signaling (
     id         BIGSERIAL PRIMARY KEY,
     room_id    UUID NOT NULL,
@@ -28,6 +50,10 @@ CREATE TABLE IF NOT EXISTS signaling (
 );
 
 -- ICE candidates
+-- https://en.wikipedia.org/wiki/Interactive_Connectivity_Establishment
+-- ICE stands for Interactive Connectivity Establishment
+-- It is a protocol for establishing a connection between two peers
+-- Network addresses(IP:port combinations) where your browser can connect to
 CREATE TABLE IF NOT EXISTS ice_candidates (
     id         BIGSERIAL PRIMARY KEY,
     room_id    UUID NOT NULL,
@@ -45,3 +71,5 @@ ALTER TABLE participants   REPLICA IDENTITY FULL;
 -- Publication the Go WAL listener subscribes to
 CREATE PUBLICATION video_signaling
     FOR TABLE signaling, ice_candidates, participants;
+
+
